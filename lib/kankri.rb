@@ -38,6 +38,6 @@ module Kankri
   #
   # @return [Object]  An authenticator for the given hash.
   def self.authenticator_from_hash(hash)
-    BasicAuthenticator.new(hash)
+    SimpleAuthenticator.new(hash)
   end
 end

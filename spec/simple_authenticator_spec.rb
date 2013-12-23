@@ -40,14 +40,14 @@ describe Kankri::SimpleAuthenticator do
       end
     end
     context 'when the user is not authorised' do
-      it 'fails with an AuthenticationFailure' do
+      specify do
         expect { subject.authenticate(:wrong, :hunter2) }.to raise_error(
           Kankri::AuthenticationFailure
         )
       end
     end
     context 'when the password is incorrect' do
-      it 'fails with an AuthenticationFailure' do
+      specify do
         expect { subject.authenticate(:test, :wrong) }.to raise_error(
           Kankri::AuthenticationFailure
         )
@@ -57,49 +57,30 @@ describe Kankri::SimpleAuthenticator do
 end
 
 describe Kankri::PasswordCheck do
-  let(:passwords) { { test: :hunter2 } }
+  let(:passwords) { { test: 'hunter2' } }
   let(:pc) { ->(u, p) { Kankri::PasswordCheck.new(u, p, passwords) } }
 
   describe '#ok?' do
-    context 'with a valid string username and password' do
-      it 'returns true' do
-        expect(pc.call('test', 'hunter2').ok?).to be_true
-      end
-    end
-    context 'with a valid symbol username and password' do
-      it 'returns true' do
-        expect(pc.call(:test, :hunter2).ok?).to be_true
-      end
+    context 'with a valid username and password' do
+      specify { expect(pc.call(:test, 'hunter2').ok?).to be_true }
     end
     context 'with a valid username and invalid password' do
-      it 'returns false' do
-        expect(pc.call('test', 'nope').ok?).to be_false
-      end
+      specify { expect(pc.call(:test, 'nope').ok?).to be_false }
     end
     context 'with an invalid username and password' do
-      it 'returns false' do
-        expect(pc.call('toast', 'nope').ok?).to be_false
-      end
+      specify { expect(pc.call(:toast, 'nope').ok?).to be_false }
     end
     context 'with a valid username and blank password' do
-      it 'returns false' do
-        expect(pc.call('test', '').ok?).to be_false
-      end
+      specify { expect(pc.call(:test, '').ok?).to be_false }
     end
     context 'with a blank username and password' do
-      it 'returns false' do
-        expect(pc.call('', '').ok?).to be_false
-      end
+      specify { expect(pc.call(:'', '').ok?).to be_false }
     end
     context 'with a valid username and nil password' do
-      it 'returns false' do
-        expect(pc.call('test', nil).ok?).to be_false
-      end
+      specify { expect(pc.call(:test, nil).ok?).to be_false }
     end
     context 'with a nil username and password' do
-      it 'returns false' do
-        expect(pc.call(nil, nil).ok?).to be_false
-      end
+      specify { expect(pc.call(nil, nil).ok?).to be_false }
     end
   end
 end

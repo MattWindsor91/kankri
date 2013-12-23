@@ -16,7 +16,7 @@ describe MockPrivilegeSubject do
   {fail_if_cannot: :require, can?: :has?}.each do |subject_meth, set_meth|
     describe "##{subject_meth}" do
       context 'when given a valid privilege set and operation' do
-        it 'calls ##{set_meth} on the privilege set with the handler target' do
+        it "calls ##{set_meth} on the privilege set with the handler target" do
           expect(privilege_set).to receive(set_meth).once.with(
             operation, subject.privilege_key
           )

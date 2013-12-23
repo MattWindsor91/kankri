@@ -15,13 +15,13 @@ module Kankri
 
     def authenticate(username, password)
       auth_fail unless auth_ok?(username.intern, password.to_s)
-      privileges_for(username)
+      privileges_for(username.intern)
     end
 
     private
 
     def privileges_for(username)
-      @privilege_sets[username.intern]
+      @privilege_sets[username]
     end
 
     # Creates a hash mapping username symbols to their password strings
@@ -35,7 +35,7 @@ module Kankri
     end
 
     def transform_users
-      Hash.new[@users.map { |name, entry| [name.intern, (yield entry)] }]
+      Hash[@users.map { |name, entry| [name.intern, (yield entry)] }]
     end
 
     def auth_fail

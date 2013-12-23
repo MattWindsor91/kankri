@@ -41,12 +41,6 @@ module Kankri
       @privilege_sets[username]
     end
 
-    def hashers
-      transform_users do |_, _|
-        ->(password) { Digest::SHA256.digest(password + salt) }
-      end
-    end
-
     # Creates a hash mapping username symbols to their password strings
     def passwords
       transform_users do |name, entry|

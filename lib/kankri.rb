@@ -1,7 +1,8 @@
-require 'kankri/version'
-require 'kankri/simple_authenticator'
+require 'kankri/password_check'
 require 'kankri/privilege_set'
 require 'kankri/privilege_subject'
+require 'kankri/simple_authenticator'
+require 'kankri/version'
 
 # Main module for Kankri
 #

@@ -6,9 +6,26 @@ module Kankri
   # This object holds user data in memory, including passwords.  It is thus
   # not secure for mission-critical applications.
   class SimpleAuthenticator
-    def initialize(users)
+    # Makes hashing functions for users based on SHA256.
+    def self.sha256_hasher(usernames)
+      digest_hasher(usernames, Digest::SHA256)
+    end
+
+    # Makes hashing functions for users based on a Digest implementation.
+    def self.digest_hasher(usernames, hasher)
+      Hash[
+        usernames.map do |username|
+          salt = SecureRandom.random_bytes
+          [username, ->(password) { hasher.digest(password + salt) } ]
+        end
+      ]
+    end
+
+    def initialize(users, hash_maker = nil)
+      hash_maker ||= self.class.method(:sha256_hasher)
       @users = users
 
+      @hashers = hash_maker.call(@users.keys)
       @passwords = passwords
       @privilege_sets = privilege_sets
     end
@@ -24,18 +41,27 @@ module Kankri
       @privilege_sets[username]
     end
 
+    def hashers
+      transform_users do |_, _|
+        ->(password) { Digest::SHA256.digest(password + salt) }
+      end
+    end
+
     # Creates a hash mapping username symbols to their password strings
     def passwords
-      transform_users { |user| user.fetch(:password).to_s }
+      transform_users do |name, entry|
+        plaintext = entry.fetch(:password).to_s
+        @hashers.fetch(name).call(plaintext)
+      end
     end
 
     # Creates a hash mapping username symbols to their privilege sets
     def privilege_sets
-      transform_users { |user| PrivilegeSet.new(user.fetch(:privileges)) }
+      transform_users { |_, entry| PrivilegeSet.new(entry.fetch(:privileges)) }
     end
 
     def transform_users
-      Hash[@users.map { |name, entry| [name.intern, (yield entry)] }]
+      Hash[@users.map { |name, entry| [name.intern, (yield name, entry)] }]
     end
 
     def auth_fail
@@ -43,7 +69,16 @@ module Kankri
     end
 
     def auth_ok?(username, password)
-      PasswordCheck.new(username, password, @passwords).ok?
+      username_present?(username) && password_ok?(username, password)
+    end
+
+    def username_present?(username)
+      @hashers.key?(username) && @passwords.key?(username)
+    end
+
+    def password_ok?(username, password)
+      hashed_pass = @hashers.fetch(username).call(password)
+      PasswordCheck.new(username, hashed_pass, @passwords).ok?
     end
   end
 
@@ -56,7 +91,7 @@ module Kankri
     end
 
     def ok?
-      auth_present? && password_match?
+      auth_present? && user_known? && password_match?
     end
 
     def auth_present?
@@ -72,7 +107,11 @@ module Kankri
     end
 
     def password_match?
-      @passwords[@username] == @password
+      @passwords.fetch(@username) == @password
+    end
+
+    def user_known?
+      @passwords.key?(@username)
     end
   end
 end

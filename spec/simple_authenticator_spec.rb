@@ -109,32 +109,3 @@ describe Kankri::SimpleAuthenticator do
     end
   end
 end
-
-describe Kankri::PasswordCheck do
-  let(:passwords) { { test: 'hunter2' } }
-  let(:pc) { ->(u, p) { Kankri::PasswordCheck.new(u, p, passwords) } }
-
-  describe '#ok?' do
-    context 'with a valid username and password' do
-      specify { expect(pc.call(:test, 'hunter2').ok?).to be_true }
-    end
-    context 'with a valid username and invalid password' do
-      specify { expect(pc.call(:test, 'nope').ok?).to be_false }
-    end
-    context 'with an invalid username and password' do
-      specify { expect(pc.call(:toast, 'nope').ok?).to be_false }
-    end
-    context 'with a valid username and blank password' do
-      specify { expect(pc.call(:test, '').ok?).to be_false }
-    end
-    context 'with a blank username and password' do
-      specify { expect(pc.call(:'', '').ok?).to be_false }
-    end
-    context 'with a valid username and nil password' do
-      specify { expect(pc.call(:test, nil).ok?).to be_false }
-    end
-    context 'with a nil username and password' do
-      specify { expect(pc.call(nil, nil).ok?).to be_false }
-    end
-  end
-end

@@ -41,14 +41,28 @@ describe Kankri::SimpleAuthenticator do
     end
     context 'when the user is not authorised' do
       specify do
-        expect { subject.authenticate(:wrong, :hunter2) }.to raise_error(
+        expect { subject.authenticate('wrong', 'hunter2') }.to raise_error(
           Kankri::AuthenticationFailure
         )
       end
     end
     context 'when the password is incorrect' do
       specify do
-        expect { subject.authenticate(:test, :wrong) }.to raise_error(
+        expect { subject.authenticate('test', 'wrong') }.to raise_error(
+          Kankri::AuthenticationFailure
+        )
+      end
+    end
+    context 'when the password is blank' do
+      specify do
+        expect { subject.authenticate('test', '') }.to raise_error(
+          Kankri::AuthenticationFailure
+        )
+      end
+    end
+    context 'when the username is blank' do
+      specify do
+        expect { subject.authenticate('', 'hunter2') }.to raise_error(
           Kankri::AuthenticationFailure
         )
       end

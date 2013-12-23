@@ -15,7 +15,7 @@ module Kankri
 
     def authenticate(username, password)
       auth_fail unless auth_ok?(username.intern, password.to_s)
-      privileges_for(username) : auth_fail
+      privileges_for(username)
     end
 
     private

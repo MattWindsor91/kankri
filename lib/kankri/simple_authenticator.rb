@@ -26,12 +26,12 @@ module Kankri
 
     # Creates a hash mapping username symbols to their password strings
     def passwords
-      transform_users { |user| user[:password].to_s }
+      transform_users { |user| user.fetch(:password).to_s }
     end
 
     # Creates a hash mapping username symbols to their privilege sets
     def privilege_sets
-      transform_users { |user| PrivilegeSet.new(user[:privileges]) }
+      transform_users { |user| PrivilegeSet.new(user.fetch(:privileges)) }
     end
 
     def transform_users

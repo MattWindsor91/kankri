@@ -13,8 +13,48 @@ describe Kankri::SimpleAuthenticator do
       }
     }
   end
+  let(:no_password) do
+    {
+      test: {
+        privileges: {
+          channel_set: ['get'],
+          channel: 'all'
+        }
+      }
+    }
+  end
+  let(:no_privs) do
+    {
+      test: {
+        password: 'hunter2'
+      }
+    }
+  end
 
   subject { Kankri::SimpleAuthenticator.new(config) }
+
+  describe '#initialize' do
+    context 'when the config is valid' do
+      it 'succeeds' do
+        Kankri::SimpleAuthenticator.new(config)
+      end
+    end
+    context 'when a user is missing a password' do
+      specify do
+        expect { Kankri::SimpleAuthenticator.new(no_password) }.to raise_error
+      end
+    end
+    context 'when a user is missing a privilege hash' do
+      specify do
+        expect { Kankri::SimpleAuthenticator.new(no_privs) }.to raise_error
+      end
+    end
+    context 'when the input is not a hash' do
+      specify do
+        expect { Kankri::SimpleAuthenticator.new('nope') }.to raise_error
+      end
+    end
+  end
 
   describe '#authenticate' do
     context 'when the user and password are valid strings' do

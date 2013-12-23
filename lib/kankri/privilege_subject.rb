@@ -5,11 +5,13 @@ module Kankri
   # which identifies the object in the privilege set.
   module PrivilegeSubject
     # Checks whether an operation can proceed on this privilege subject
+    # @api public
     def can?(operation, privilege_set)
       privilege_set.has?(operation, privilege_key)
     end
 
     # Fails if an operation cannot proceed on this model object
+    # @api public
     def fail_if_cannot(operation, privilege_set)
       privilege_set.require(operation, privilege_key)
     end

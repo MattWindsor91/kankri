@@ -16,6 +16,7 @@ module Kankri
     end
 
     # Requires a certain privilege on a certain target
+    # @api public
     def require(target, privilege)
       fail(InsufficientPrivilegeError) unless has?(target, privilege)
     end
@@ -39,12 +40,14 @@ module Kankri
 
     private
 
+    # @api private
     def symbolise_privileges
       @privileges = Hash[@privileges.map do |key, key_privs|
         [key.to_sym, symbolise_privilege_list(key_privs)]
       end]
     end
 
+    # @api private
     def symbolise_privilege_list(privlist)
       privlist.is_a?(Array) ? privlist.map(&:to_sym) : privlist.to_sym
     end
@@ -52,34 +55,40 @@ module Kankri
 
   # A method object for checking privileges.
   class PrivilegeChecker
+    # @api public
     def initialize(target, requisite, privileges)
       @target = target.intern
       @requisite = requisite.intern
       @privileges = privileges
     end
 
+    # @api public
     def check?
       has_all? || has_direct?
     end
 
     private
 
+    # @api private
     # @return [Boolean] true if this privilege set has all privileges for a
     #   target.
     def has_all?
       @privileges[@target] == :all
     end
 
+    # @api private
     # @return [Boolean] true if this privilege set explicitly has a certain
     #   privilege for a certain target.
     def has_direct?
       target_in_privileges? && requisite_in_target_privileges?
     end
 
+    # @api private
     def target_in_privileges?
       @privileges.key?(@target)
     end
 
+    # @api private
     def requisite_in_target_privileges?
       @privileges[@target].include?(@requisite)
     end

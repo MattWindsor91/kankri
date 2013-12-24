@@ -7,19 +7,25 @@ module Kankri
   # The PrivilegeSet is the return value of an Authenticator, and represents
   # the level of privilege the
   class PrivilegeSet
-    # Initialises a privilege set.
+    # Initialises a privilege set
     #
     # @api public
-    # @example Create a privilege set with no privileges.
+    # @example  Create a privilege set with no privileges.
     #   PrivilegeSet.new({})
-    # @example Create a privilege set with some privileges.
+    # @example  Create a privilege set with some privileges.
     #   PrivilegeSet.new({channel_set: [:get, :put]})
     def initialize(privileges)
       @privileges = symbolise_privileges(privileges)
     end
 
     # Requires a certain privilege on a certain target
+    #
     # @api public
+    # @example  Check your privilege.
+    #   privs.require(:channel, :put)
+    #
+    # @param (see #has?)
+    #
     # @return [void]
     def require(target, privilege)
       fail(InsufficientPrivilegeError) unless has?(target, privilege)
@@ -28,7 +34,7 @@ module Kankri
     # Checks to see if a certain privilege exists on a given target
     #
     # @api public
-    # @example Check your privilege.
+    # @example  Check your privilege.
     #   privs.has?(:channel, :put)
     #   #=> false
     #

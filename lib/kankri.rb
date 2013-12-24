@@ -27,7 +27,7 @@ module Kankri
   #
   # @api public
   # @example  Create an authenticator from a hash of users.
-  #   Kankri.authenticator_From_hash(
+  #   Kankri.authenticator_from_hash(
   #     admin: {
   #       password: 'hunter2',
   #       privileges: {

@@ -56,7 +56,7 @@ module Kankri
     # @param (see #initialize)
     #
     # @return (see #ok?)
-    def self.check
+    def self.check(*args)
       PasswordCheck.new(*args).ok?
     end
 

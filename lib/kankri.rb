@@ -1,4 +1,5 @@
 require 'kankri/password_check'
+require 'kankri/privilege_check'
 require 'kankri/privilege_set'
 require 'kankri/privilege_subject'
 require 'kankri/simple_authenticator'

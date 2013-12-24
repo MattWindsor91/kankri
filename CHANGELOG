@@ -1,3 +1,6 @@
+0.1.2
+  - Added require 'forwardable' to SimpleAuthenticator.
+
 0.1.1
   - Some refactoring
   - 100% code and YARD coverage

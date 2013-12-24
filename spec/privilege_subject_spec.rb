@@ -1,6 +1,7 @@
 require 'spec_helper'
 require 'kankri'
 
+# A mock object for testing PrivilegeSubject
 class MockPrivilegeSubject
   include Kankri::PrivilegeSubject
 
@@ -13,7 +14,7 @@ describe MockPrivilegeSubject do
   let(:privilege_set) { double(:privilege_set) }
   let(:operation) { double(:operation) }
 
-  {fail_if_cannot: :require, can?: :has?}.each do |subject_meth, set_meth|
+  { fail_if_cannot: :require, can?: :has? }.each do |subject_meth, set_meth|
     describe "##{subject_meth}" do
       context 'when given a valid privilege set and operation' do
         it "calls ##{set_meth} on the privilege set with the handler target" do

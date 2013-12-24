@@ -1,3 +1,4 @@
+# The current gem version.  See CHANGELOG for details.
 module Kankri
-  VERSION = "0.1.0"
+  VERSION = '0.1.1'
 end

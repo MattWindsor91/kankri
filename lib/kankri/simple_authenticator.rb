@@ -42,7 +42,7 @@ module Kankri
       Hash[
         usernames.map do |username|
           salt = SecureRandom.random_bytes
-          [username, ->(password) { hasher.digest(password + salt) } ]
+          [username, ->(password) { hasher.digest(password + salt) }]
         end
       ]
     end

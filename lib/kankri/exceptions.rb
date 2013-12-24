@@ -1,3 +1,4 @@
+# Exceptions for Kankri.
 module Kankri
   # Exception generated when authentication fails.
   AuthenticationFailure = Class.new(RuntimeError)

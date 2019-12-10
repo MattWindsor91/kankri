@@ -1,5 +1,8 @@
 # Kankri
 
+**NOTE:** This repository, and its corresponding Ruby gem, are no longer maintained.  It depends on a version of `yard` with known security vulnerabilities.  My recommendation is _not_ to use this gem, and, in the vanishingly unlikely case that
+you already use it, to migrate off it.
+
 **Kankri** is an exceptionally basic authentication system for Ruby.  It's intended for small projects that don't need database authentication, ACLs or other such things.  It has no runtime dependencies other than Ruby 2.0.
 
 It takes in a hash mapping usernames (strings or symbols) to passwords (strings) as well as a hash mapping *privilege keys* (strings or symbols) to the lists of *privileges* (strings or symbols) the user has on those keys.  It's a bit like ACL... ish.
